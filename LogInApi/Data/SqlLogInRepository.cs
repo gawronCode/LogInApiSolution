@@ -26,12 +26,7 @@ namespace LogInApi.Data
             if(client is null) throw new ArgumentNullException(nameof(client));
             _context.AppClientItems.Remove(client);
         }
-
-        public IEnumerable<AppClient> GetAllAppClients()
-        {
-            return _context.AppClientItems.ToList();
-        }
-
+        
         public AppClient GetAppClientById(int id)
         {
             return _context.AppClientItems.FirstOrDefault(p => p.Id == id);

@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace LogInApi.Dtos
 {
-    public class ApiClientReadDto
+    public class AppClientReadDto
     {
+        public string Nick { get; set; }
     }
 }

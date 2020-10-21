@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using LogInApi.Data;
+using LogInApi.Dtos;
 using LogInApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,24 +15,20 @@ namespace LogInApi.Controllers
     public class ClientController : ControllerBase
     {
         private readonly ILogInRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ClientController(ILogInRepository repository)
+        public ClientController(ILogInRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
-
-        [HttpGet]
-        public ActionResult<IEnumerable<AppClient>> GetAllAppClients()
-        {
-            return Ok(_repository.GetAllAppClients());
-        }
-
+        
         [HttpGet("{id}", Name = "GetAppClientById")]
         public ActionResult<AppClient> GetAppClientById(int id)
         {
             var appClient = _repository.GetAppClientById(id);
             if (appClient is null) return NotFound();
-            return Ok(appClient);
+            return Ok(_mapper.Map<AppClientReadDto>(appClient));
         }
 
         [HttpGet("validateCredentials")]
@@ -42,7 +40,7 @@ namespace LogInApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<AppClient> CreateAppClient(AppClient appClient)
+        public ActionResult CreateAppClient(AppClient appClient)
         {
             _repository.CreateAppClient(appClient);
             _repository.SaveChanges();
