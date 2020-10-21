@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,10 +29,24 @@ namespace LogInApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<AppClientContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("LogInApiConnection")));
+            var builder = new SqlConnectionStringBuilder();
+            builder.ConnectionString = Configuration.GetConnectionString("LogInApiConnection");
+            builder.UserID = Configuration["UserID"];
+            builder.Password = Configuration["Password"];
+
+            services.AddDbContext<AppClientContext>(opt => opt.UseSqlServer(GetConnectionString()));
 
             services.AddControllers();
             services.AddScoped<ILogInRepository, SqlLogInRepository>();
+        }
+
+        private string GetConnectionString()
+        {
+            var builder = new SqlConnectionStringBuilder();
+            builder.ConnectionString = Configuration.GetConnectionString("LogInApiConnection");
+            builder.UserID = Configuration["UserID"];
+            builder.Password = Configuration["Password"];
+            return builder.ConnectionString;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

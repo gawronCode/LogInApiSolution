@@ -47,9 +47,9 @@ namespace LogInApi.Data
             
         }
 
-        public string ValidateCredentials(int id)
+        public AppClient ValidateCredentials(AppClient client)
         {
-            throw new NotImplementedException();
+            return _context.AppClientItems.FirstOrDefault(p => p.Nick == client.Nick && p.PassCode == client.PassCode);
         }
     }
 }

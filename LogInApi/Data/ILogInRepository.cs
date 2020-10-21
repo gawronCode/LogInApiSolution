@@ -12,7 +12,7 @@ namespace LogInApi.Data
         public bool SaveChanges();
         public IEnumerable<AppClient> GetAllAppClients();
         public AppClient GetAppClientById(int id);
-        public string ValidateCredentials(int id);
+        public AppClient ValidateCredentials(AppClient client);
         public void CreateAppClient(AppClient client);
         public void UpdateCredentials(AppClient client);
         public void DeleteAppClient(AppClient client);
