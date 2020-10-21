@@ -6,7 +6,7 @@ using LogInApi.Models;
 
 namespace LogInApi.Data
 {
-    interface ILogInRepository
+    public interface ILogInRepository
     {
 
         public bool SaveChanges();

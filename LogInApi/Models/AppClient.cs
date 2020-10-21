@@ -14,12 +14,10 @@ namespace LogInApi.Models
         public int Id { get; set; }
 
         [Required]
-        [MinLength(4)]
         [MaxLength(64)]
         public string Nick { get; set; }
 
         [Required]
-        [MinLength(8)]
         [MaxLength(64)]
         public string PassCode { get; set; }
 

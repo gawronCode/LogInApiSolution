@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LogInApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace LogInApi
 {
@@ -25,7 +27,11 @@ namespace LogInApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<AppClientContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("LogInApiConnection")));
+
             services.AddControllers();
+            services.AddScoped<ILogInRepository, SqlLogInRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
