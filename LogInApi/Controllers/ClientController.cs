@@ -49,7 +49,43 @@ namespace LogInApi.Controllers
             return CreatedAtRoute(nameof(GetAppClientById), new {Id = appClient.Id}, _mapper.Map<AppClientReadDto>(appClient));
         }
 
+        [HttpDelete]
+        public ActionResult DeleteAppClient(AppClientDeleteDto appClientDeleteDto)
+        {
+            var appClient = _mapper.Map<AppClient>(appClientDeleteDto);
+            var appClientToDelete = _repository.ValidateCredentials(appClient);
+            if (appClientToDelete is null) return NotFound();
+            _repository.DeleteAppClient(appClientToDelete);
+            _repository.SaveChanges();
+            return NoContent();
+        }
 
+        [HttpPatch]
+        public ActionResult<string> UpdateCredentials(AppClientUpdateDto appClientUpdateDto)
+        {
+            var appClient = _mapper.Map<AppClient>(appClientUpdateDto);
+            var appClientValidated = _repository.ValidateCredentials(appClient);
+            if (appClientValidated is null) return NotFound();
 
+            var appClientUpdated = new AppClient
+            {
+                Nick = appClientValidated.Nick,
+                EmailAddress = appClientValidated.EmailAddress,
+                Id = appClientValidated.Id,
+                PassCode = appClientValidated.PassCode
+            };
+
+            if (appClientUpdateDto.NewPassCode != null) 
+                appClientUpdated.PassCode = appClientUpdateDto.NewPassCode;
+
+            if (appClientUpdateDto.NewEmailAddress != null)
+                appClientUpdated.EmailAddress = appClientUpdateDto.NewEmailAddress;
+
+            _mapper.Map(appClientUpdated, appClientValidated);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+        
     }
 }
