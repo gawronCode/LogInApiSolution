@@ -30,12 +30,6 @@ namespace LogInApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-            var builder = new SqlConnectionStringBuilder();
-            builder.ConnectionString = Configuration.GetConnectionString("LogInApiConnection");
-            builder.UserID = Configuration["UserID"];
-            builder.Password = Configuration["Password"];
-
             services.AddDbContext<AppClientContext>(opt => opt.UseSqlServer(GetConnectionString()));
 
             services.AddControllers();
