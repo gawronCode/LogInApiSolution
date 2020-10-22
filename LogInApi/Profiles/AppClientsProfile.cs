@@ -13,6 +13,8 @@ namespace LogInApi.Profiles
         public AppClientsProfile()
         {
             CreateMap<AppClient, AppClientReadDto>();
+            CreateMap<AppClient, AppClientCreateDto>();
+            CreateMap<AppClientCredentialsDto, AppClient>();
         }
     }
 }

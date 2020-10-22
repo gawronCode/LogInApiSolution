@@ -24,27 +24,29 @@ namespace LogInApi.Controllers
         }
         
         [HttpGet("{id}", Name = "GetAppClientById")]
-        public ActionResult<AppClient> GetAppClientById(int id)
+        public ActionResult<AppClientReadDto> GetAppClientById(int id)
         {
             var appClient = _repository.GetAppClientById(id);
             if (appClient is null) return NotFound();
             return Ok(_mapper.Map<AppClientReadDto>(appClient));
         }
 
-        [HttpGet("validateCredentials")]
-        public ActionResult<string> ValidateCredentials(AppClient appClient)
+        [HttpGet("credentials")]
+        public ActionResult<string> ValidateCredentials(AppClientCredentialsDto appClientCredentialsDto)
         {
+            var appClient = _mapper.Map<AppClient>(appClientCredentialsDto);
             var appClientFromRepo = _repository.ValidateCredentials(appClient);
             if (appClientFromRepo is null) return NoContent();
             return Ok("session_token_string"); //mock session token string
         }
 
         [HttpPost]
-        public ActionResult CreateAppClient(AppClient appClient)
+        public ActionResult<AppClientReadDto> CreateAppClient(AppClientCreateDto appClientCreateDto)
         {
+            var appClient = _mapper.Map<AppClient>(appClientCreateDto);
             _repository.CreateAppClient(appClient);
             _repository.SaveChanges();
-            return CreatedAtRoute(nameof(GetAppClientById), new {Id = appClient.Id}, appClient);
+            return CreatedAtRoute(nameof(GetAppClientById), new {Id = appClient.Id}, _mapper.Map<AppClientReadDto>(appClient));
         }
 
 
